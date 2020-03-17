@@ -2,10 +2,14 @@ package com.binance.cms.api.mapper;
 
 import com.binance.cms.api.model.dto.AbstractDto;
 import com.binance.cms.api.model.entity.AbstractEntity;
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 
-import static com.binance.cms.api.mapper.MapperConverter.*;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+import static com.binance.cms.api.util.DateUtil.formatDate;
 
 public abstract class AbstractMapper<E extends AbstractEntity, D extends AbstractDto> {
 
@@ -14,6 +18,13 @@ public abstract class AbstractMapper<E extends AbstractEntity, D extends Abstrac
     public AbstractMapper(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
     }
+
+    private Converter<LocalDateTime, String> localDateTimeToString = ctx -> ctx.getSource() == null ? null : formatDate(ctx.getSource());
+    private Converter<String, LocalDateTime> stringToLocalDateTime = ctx -> ctx.getSource() == null ? null : formatDate(ctx.getSource());
+
+    private Converter<UUID, String> uuidToString = ctx -> ctx.getSource() == null ? null : ctx.getSource().toString();
+    private Converter<String, UUID> stringToUuid = ctx -> ctx.getSource() == null ? null : UUID.fromString(ctx.getSource());
+
 
     protected void addBaseToDtoMapping(TypeMap<? extends AbstractEntity, ? extends AbstractDto> typeMap) {
         typeMap.addMappings(mapper -> {
