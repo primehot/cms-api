@@ -6,12 +6,10 @@ import com.binance.cms.api.model.entity.ArticleEntity;
 import com.binance.cms.api.service.ArticleService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
@@ -27,6 +25,38 @@ public class ArticleController {
         ArticleEntity result = articleService.create(entity);
 
         return ResponseEntity.ok(articleMapper.toDto(result));
+    }
+
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<ArticleDto> getArticle(@PathVariable("id") String id) {
+        UUID uuidId = UUID.fromString(id);
+        ArticleEntity result = articleService.get(uuidId);
+
+        return ResponseEntity.ok(articleMapper.toDto(result));
+    }
+
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<ArticleDto> editArticle(@PathVariable("id") String id, @RequestBody @Valid ArticleDto dto) {
+        UUID uuidId = UUID.fromString(id);
+        ArticleEntity result = articleService.edit(uuidId, articleMapper.toEntity(dto));
+
+        return ResponseEntity.ok(articleMapper.toDto(result));
+    }
+
+    @PostMapping(path = "/{id}/publish")
+    public ResponseEntity publishArticle(@PathVariable("id") String id) {
+        UUID uuidId = UUID.fromString(id);
+        articleService.publish(uuidId);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity deleteArticle(@PathVariable("id") String id) {
+        UUID uuidId = UUID.fromString(id);
+        articleService.delete(uuidId);
+
+        return ResponseEntity.ok().build();
     }
 
 }

@@ -22,8 +22,8 @@ public abstract class AbstractMapper<E extends AbstractEntity, D extends Abstrac
     protected Converter<UUID, String> uuidToString = ctx -> ctx.getSource() == null ? null : ctx.getSource().toString();
     protected Converter<String, UUID> stringToUuid = ctx -> ctx.getSource() == null ? null : UUID.fromString(ctx.getSource());
 
-    private Converter<LocalDateTime, String> localDateTimeToString = ctx -> ctx.getSource() == null ? null : formatDate(ctx.getSource());
-    private Converter<String, LocalDateTime> stringToLocalDateTime = ctx -> ctx.getSource() == null ? null : formatDate(ctx.getSource());
+    protected Converter<LocalDateTime, String> localDateTimeToString = ctx -> ctx.getSource() == null ? null : formatDate(ctx.getSource());
+    protected Converter<String, LocalDateTime> stringToLocalDateTime = ctx -> ctx.getSource() == null ? null : formatDate(ctx.getSource());
 
     protected void addBaseToDtoMapping(TypeMap<? extends AbstractEntity, ? extends AbstractDto> typeMap) {
         typeMap.addMappings(mapper -> {

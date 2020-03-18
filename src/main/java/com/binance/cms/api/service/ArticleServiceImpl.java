@@ -9,14 +9,13 @@ import com.binance.cms.api.repository.ImageRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
 @AllArgsConstructor
 @Slf4j
-@Transactional
 public class ArticleServiceImpl implements ArticleService {
 
     private ArticleRepository repository;
@@ -38,7 +37,7 @@ public class ArticleServiceImpl implements ArticleService {
 
         entity.setId(id);
         ArticleEntity updated = repository.save(entity);
-        log.info("offer edit. ID {}", id.toString());
+        log.info("Article edit. ID {}", id.toString());
         return updated;
     }
 
@@ -51,9 +50,19 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public ArticleEntity get(UUID id) {
-        ArticleEntity found = repository.findById(id).orElseThrow(ItemNotFoundException::new);
+        ArticleEntity found = repository.getById(id).orElseThrow(ItemNotFoundException::new);
         log.info("Article retrieve. ID {}", found.getId());
         return found;
+    }
+
+    @Override
+    public void publish(UUID id) {
+        ArticleEntity toPublish = repository.findById(id).orElseThrow(ItemNotFoundException::new);
+
+        //Simulation on publishing event
+        toPublish.setIsPublished(true);
+        toPublish.setPublishedAt(LocalDateTime.now().plusSeconds(3));
+        repository.save(toPublish);
     }
 
     private void setImageLink(UUID imageId, boolean isLinked) {

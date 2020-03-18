@@ -14,4 +14,6 @@ public interface ArticleService {
 
     ArticleEntity get(UUID id);
 
+    void publish(UUID id);
+
 }

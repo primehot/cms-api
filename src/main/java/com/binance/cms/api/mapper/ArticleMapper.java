@@ -38,6 +38,7 @@ public class ArticleMapper extends AbstractMapper<ArticleEntity, ArticleDto> {
         entityToDtoMap.addMappings(mapper -> {
             mapper.using(toTranslationsDto).map(ArticleEntity::getTranslations, ArticleDto::setTranslations);
             mapper.using(uuidToString).map(ArticleEntity::getImageId, ArticleDto::setImageId);
+            mapper.using(localDateTimeToString).map(ArticleEntity::getPublishedAt, ArticleDto::setPublishedAt);
         });
 
         dtoToEntityMap = modelMapper.createTypeMap(ArticleDto.class, ArticleEntity.class);
@@ -45,6 +46,7 @@ public class ArticleMapper extends AbstractMapper<ArticleEntity, ArticleDto> {
         dtoToEntityMap.addMappings(mapper -> {
             mapper.using(toTranslationsEntity).map(ArticleDto::getTranslations, ArticleEntity::setTranslations);
             mapper.using(stringToUuid).map(ArticleDto::getImageId, ArticleEntity::setImageId);
+            mapper.using(stringToLocalDateTime).map(ArticleDto::getPublishedAt, ArticleEntity::setPublishedAt);
         });
     }
 

@@ -10,11 +10,13 @@ create table if not exists image
 
 create table if not exists article
 (
-    id          uuid PRIMARY KEY,
-    created_at  timestamp NOT NULL,
-    modified_at timestamp NOT NULL,
+    id           uuid PRIMARY KEY,
+    created_at   timestamp NOT NULL,
+    modified_at  timestamp NOT NULL,
 
-    image_id uuid references image
+    image_id     uuid references image,
+    is_published boolean,
+    published_at timestamp
 );
 
 create table if not exists article_translation
