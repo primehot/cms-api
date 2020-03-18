@@ -24,7 +24,7 @@ public class ArticleController {
     @PostMapping
     public ResponseEntity<ArticleDto> saveArticle(@RequestBody @Valid ArticleDto dto) {
         ArticleEntity entity = articleMapper.toEntity(dto);
-        ArticleEntity result = articleService.save(entity);
+        ArticleEntity result = articleService.create(entity);
 
         return ResponseEntity.ok(articleMapper.toDto(result));
     }

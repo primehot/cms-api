@@ -1,23 +1,61 @@
 package com.binance.cms.api.service;
 
+import com.binance.cms.api.exception.ImageNotFoundException;
+import com.binance.cms.api.exception.ItemNotFoundException;
 import com.binance.cms.api.model.entity.ArticleEntity;
+import com.binance.cms.api.model.entity.ImageEntity;
 import com.binance.cms.api.repository.ArticleRepository;
+import com.binance.cms.api.repository.ImageRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
 @Slf4j
+@Transactional
 public class ArticleServiceImpl implements ArticleService {
 
     private ArticleRepository repository;
+    private final ImageRepository imageRepository;
 
     @Override
-    public ArticleEntity save(ArticleEntity entity) {
+    public ArticleEntity create(ArticleEntity entity) {
         ArticleEntity result = repository.save(entity);
-
-        log.info("Article was saved with id: " + result.getId());
+        ImageEntity image = imageRepository.findById(entity.getImageId()).orElseThrow(ImageNotFoundException::new);
+        image.setIsLinked(true);
+        imageRepository.save(image);
+        log.info("Article created with ID {}", result.getId().toString());
         return result;
+    }
+
+    @Override
+    public ArticleEntity edit(UUID id, ArticleEntity entity) {
+        ArticleEntity old = repository.findById(id).orElseThrow(ItemNotFoundException::new);
+        ImageEntity image = imageRepository.findById(old.getImageId()).orElseThrow(ImageNotFoundException::new);
+        image.setIsLinked(false);
+        imageRepository.save(image);
+
+        entity.setId(id);
+        ArticleEntity updated = repository.save(entity);
+        log.info("offer edit. ID {}", id.toString());
+        return updated;
+    }
+
+    @Override
+    public void delete(UUID id) {
+        ArticleEntity toRemove = repository.findById(id).orElseThrow(ItemNotFoundException::new);
+        repository.delete(toRemove);
+        log.info("Article deleted. ID {}", id.toString());
+    }
+
+    @Override
+    public ArticleEntity get(UUID id) {
+        ArticleEntity found = repository.findById(id).orElseThrow(ItemNotFoundException::new);
+        log.info("Article retrieve. ID {}", found.getId());
+        return found;
     }
 }
