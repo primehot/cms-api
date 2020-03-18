@@ -11,7 +11,6 @@ import java.util.UUID;
 @Setter
 public class ArticleDto extends AbstractDto {
 
-    @NotNull
     private List<ArticleTranslationDto> translations;
 
     private String imageId;

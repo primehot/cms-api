@@ -1,9 +1,7 @@
 package com.binance.cms.api.mapper;
 
-import com.binance.cms.api.model.dto.AbstractDto;
 import com.binance.cms.api.model.dto.ArticleDto;
 import com.binance.cms.api.model.dto.ArticleTranslationDto;
-import com.binance.cms.api.model.entity.AbstractEntity;
 import com.binance.cms.api.model.entity.ArticleEntity;
 import com.binance.cms.api.model.entity.ArticleTranslationEntity;
 import org.modelmapper.Converter;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 
 @Component
 public class ArticleMapper extends AbstractMapper<ArticleEntity, ArticleDto> {
@@ -34,7 +31,7 @@ public class ArticleMapper extends AbstractMapper<ArticleEntity, ArticleDto> {
 
         initMapper();
     }
-    
+
     private void initMapper() {
         entityToDtoMap = modelMapper.createTypeMap(ArticleEntity.class, ArticleDto.class);
         addBaseToDtoMapping(entityToDtoMap);

@@ -37,8 +37,9 @@ public class ImageService {
         if (image.isEmpty()) {
             throw new InvalidImageException("Image could not be empty");
         } else {
-            ImageEntity imageEntity = fileMapper.convert(image);
-            return imageRepository.save(requireNonNull(imageEntity)).getId();
+            UUID savedId = imageRepository.save(requireNonNull(fileMapper.convert(image))).getId();
+            log.info("Image saved. ID {}", savedId);
+            return savedId;
         }
     }
 

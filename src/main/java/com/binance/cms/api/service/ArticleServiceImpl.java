@@ -25,9 +25,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public ArticleEntity create(ArticleEntity entity) {
         ArticleEntity result = repository.save(entity);
-        ImageEntity image = imageRepository.findById(entity.getImageId()).orElseThrow(ImageNotFoundException::new);
-        image.setIsLinked(true);
-        imageRepository.save(image);
+        setImageLink(entity.getImageId(), true);
         log.info("Article created with ID {}", result.getId().toString());
         return result;
     }
@@ -35,9 +33,8 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public ArticleEntity edit(UUID id, ArticleEntity entity) {
         ArticleEntity old = repository.findById(id).orElseThrow(ItemNotFoundException::new);
-        ImageEntity image = imageRepository.findById(old.getImageId()).orElseThrow(ImageNotFoundException::new);
-        image.setIsLinked(false);
-        imageRepository.save(image);
+        setImageLink(old.getImageId(), false);
+        setImageLink(entity.getImageId(), true);
 
         entity.setId(id);
         ArticleEntity updated = repository.save(entity);
@@ -57,5 +54,13 @@ public class ArticleServiceImpl implements ArticleService {
         ArticleEntity found = repository.findById(id).orElseThrow(ItemNotFoundException::new);
         log.info("Article retrieve. ID {}", found.getId());
         return found;
+    }
+
+    private void setImageLink(UUID imageId, boolean isLinked) {
+        if (imageId != null) {
+            ImageEntity image = imageRepository.findById(imageId).orElseThrow(ImageNotFoundException::new);
+            image.setIsLinked(isLinked);
+            imageRepository.save(image);
+        }
     }
 }
