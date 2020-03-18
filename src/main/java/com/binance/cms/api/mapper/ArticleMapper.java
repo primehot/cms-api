@@ -1,7 +1,9 @@
 package com.binance.cms.api.mapper;
 
+import com.binance.cms.api.model.dto.AbstractDto;
 import com.binance.cms.api.model.dto.ArticleDto;
 import com.binance.cms.api.model.dto.ArticleTranslationDto;
+import com.binance.cms.api.model.entity.AbstractEntity;
 import com.binance.cms.api.model.entity.ArticleEntity;
 import com.binance.cms.api.model.entity.ArticleTranslationEntity;
 import org.modelmapper.Converter;
@@ -32,16 +34,21 @@ public class ArticleMapper extends AbstractMapper<ArticleEntity, ArticleDto> {
 
         initMapper();
     }
-
-
+    
     private void initMapper() {
         entityToDtoMap = modelMapper.createTypeMap(ArticleEntity.class, ArticleDto.class);
         addBaseToDtoMapping(entityToDtoMap);
-        entityToDtoMap.addMappings(mapper -> mapper.using(toTranslationsDto).map(ArticleEntity::getTranslations, ArticleDto::setTranslations));
+        entityToDtoMap.addMappings(mapper -> {
+            mapper.using(toTranslationsDto).map(ArticleEntity::getTranslations, ArticleDto::setTranslations);
+            mapper.using(uuidToString).map(ArticleEntity::getImageId, ArticleDto::setImageId);
+        });
 
         dtoToEntityMap = modelMapper.createTypeMap(ArticleDto.class, ArticleEntity.class);
         addBaseToEntityMapping(dtoToEntityMap);
-        dtoToEntityMap.addMappings(mapper -> mapper.using(toTranslationsEntity).map(ArticleDto::getTranslations, ArticleEntity::setTranslations));
+        dtoToEntityMap.addMappings(mapper -> {
+            mapper.using(toTranslationsEntity).map(ArticleDto::getTranslations, ArticleEntity::setTranslations);
+            mapper.using(stringToUuid).map(ArticleDto::getImageId, ArticleEntity::setImageId);
+        });
     }
 
     public ArticleDto toDto(ArticleEntity entity) {
