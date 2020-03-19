@@ -6,6 +6,7 @@ import com.binance.cms.api.model.dto.ArticleDto;
 import com.binance.cms.api.model.entity.ArticleEntity;
 import com.binance.cms.api.service.ArticleService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -16,13 +17,13 @@ import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/article")
 public class ArticleController {
 
-    private ArticleMapper articleMapper;
-    private ArticleService articleService;
-    private ArticleCustomMapper articleCustomMapper;
+    private final ArticleMapper articleMapper;
+    private final ArticleService articleService;
+    private final ArticleCustomMapper articleCustomMapper;
 
     @PostMapping
     public ResponseEntity<ArticleDto> saveArticle(@RequestBody @Valid ArticleDto dto) {

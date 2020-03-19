@@ -5,10 +5,9 @@ import com.binance.cms.api.exception.InvalidImageException;
 import com.binance.cms.api.exception.ItemNotFoundException;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.MappingException;
 import org.modelmapper.spi.ErrorMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,9 +24,8 @@ import java.sql.SQLException;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
+@Slf4j
 public class ErrorHandler extends ResponseEntityExceptionHandler {
-
-    private static final Logger log = LoggerFactory.getLogger(ErrorHandler.class);
 
     @ExceptionHandler({ItemNotFoundException.class})
     public ResponseEntity handleInvalidResourceException(RuntimeException e) {

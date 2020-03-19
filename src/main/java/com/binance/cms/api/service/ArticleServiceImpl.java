@@ -6,7 +6,7 @@ import com.binance.cms.api.model.entity.ArticleEntity;
 import com.binance.cms.api.model.entity.ImageEntity;
 import com.binance.cms.api.repository.ArticleRepository;
 import com.binance.cms.api.repository.ImageRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,11 +16,11 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class ArticleServiceImpl implements ArticleService {
 
-    private ArticleRepository repository;
+    private final ArticleRepository repository;
     private final ImageRepository imageRepository;
 
     @Override
