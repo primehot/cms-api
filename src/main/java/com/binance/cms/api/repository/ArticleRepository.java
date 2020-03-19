@@ -8,6 +8,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface ArticleRepository extends PagingAndSortingRepository<ArticleEntity, UUID> {
-    @EntityGraph(type = EntityGraph.EntityGraphType.LOAD, attributePaths={"translations"})
+    @EntityGraph(type = EntityGraph.EntityGraphType.LOAD, attributePaths = {"translations"})
     Optional<ArticleEntity> getById(UUID id);
 }

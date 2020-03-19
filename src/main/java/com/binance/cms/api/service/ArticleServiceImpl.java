@@ -8,6 +8,8 @@ import com.binance.cms.api.repository.ArticleRepository;
 import com.binance.cms.api.repository.ImageRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -63,6 +65,15 @@ public class ArticleServiceImpl implements ArticleService {
         toPublish.setIsPublished(true);
         toPublish.setPublishedAt(LocalDateTime.now().plusSeconds(3));
         repository.save(toPublish);
+        log.info("Article published. ID {}", id);
+    }
+
+    @Override
+    public Page<ArticleEntity> getAll(Pageable pageable) {
+        Page<ArticleEntity> articles = repository.findAll(pageable);
+        log.info("Articles retrieve");
+
+        return articles;
     }
 
     private void setImageLink(UUID imageId, boolean isLinked) {

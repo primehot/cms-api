@@ -1,10 +1,14 @@
 package com.binance.cms.api.controller;
 
+import com.binance.cms.api.mapper.ArticleCustomMapper;
 import com.binance.cms.api.mapper.ArticleMapper;
 import com.binance.cms.api.model.dto.ArticleDto;
 import com.binance.cms.api.model.entity.ArticleEntity;
 import com.binance.cms.api.service.ArticleService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +22,7 @@ public class ArticleController {
 
     private ArticleMapper articleMapper;
     private ArticleService articleService;
+    private ArticleCustomMapper articleCustomMapper;
 
     @PostMapping
     public ResponseEntity<ArticleDto> saveArticle(@RequestBody @Valid ArticleDto dto) {
@@ -25,6 +30,13 @@ public class ArticleController {
         ArticleEntity result = articleService.create(entity);
 
         return ResponseEntity.ok(articleMapper.toDto(result));
+    }
+
+    @GetMapping
+    public ResponseEntity getAll(@PageableDefault Pageable pageable) {
+        Page<ArticleEntity> result = articleService.getAll(pageable);
+
+        return ResponseEntity.ok().body(result.map(articleCustomMapper::convert));
     }
 
     @GetMapping(path = "/{id}")

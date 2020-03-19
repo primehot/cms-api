@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,7 +17,7 @@ public class ArticleEntity extends AbstractEntity {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "article_id")
-    private List<ArticleTranslationEntity> translations;
+    private List<ArticleTranslationEntity> translations = new ArrayList<>();
 
     @Column
     private UUID imageId;
